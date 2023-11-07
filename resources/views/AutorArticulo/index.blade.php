@@ -1,43 +1,48 @@
 @extends('layouts.app')
 
 @section('content')
-    <section class="content container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="float-right">
-                    <a href="{{ route('crearAutorArticulo') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                        {{ __('Nuevo') }}
-                    </a>
+<section class="content container-fluid mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right">
+                        <a href="{{ route('crearAutorArticulo') }}" class="btn btn-primary btn-sm">
+                            {{ __('Nuevo') }}
+                        </a>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('filtrarFechas') }}" role="form" enctype="multipart/form-data">
                         @csrf
-                        <div class="box box-info padding-1">
-                            <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="start_date">Fecha inicio</label>
-                                    <input type="date" name="start_date" id="start_date" required placeholder="Fecha de inicio" class="form-control">
+                                    <input type="date" name="start_date" id="start_date" required class="form-control">
                                     @error('start_date')
-                                        <small class="text-danger">{{$message}}</small>
+                                        <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="end_date">Fecha final</label>
-                                    <input type="date" name="end_date" id="end_date" required placeholder="Fecha final" class="form-control">
+                                    <input type="date" name="end_date" id="end_date" required class="form-control">
                                     @error('end_date')
-                                        <small class="text-danger">{{$message}}</small>
+                                        <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="box-footer mt20">
-                                <button type="submit" class="btn btn-primary">{{ __('Verificar') }}</button>
-                            </div>
+                        </div>
+                        <div class="text-center mt-3">
+                            <button type="submit" class="btn btn-primary">{{ __('Verificar') }}</button>
                         </div>
                     </form>
 
-                    @if(isset($autorArticulos))
-                        <h2>Datos Filtrados</h2>
-                        <table class="table   text-center">
+                    @if (isset($autorArticulos))
+                        <h2 class="mt-4">Datos Filtrados</h2>
+                        <table class="table table-striped text-center">
                             <thead>
                                 <tr>
                                     <th>Articulo</th>
@@ -47,7 +52,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($autorArticulos as $data)
+                                @foreach ($autorArticulos as $data)
                                     <tr>
                                         <td>{{ $data->idArticulo }}</td>
                                         <td>{{ $data->idAutor }}</td>
@@ -61,5 +66,6 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
