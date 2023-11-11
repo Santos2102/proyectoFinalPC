@@ -41,23 +41,22 @@
                     </form>
 
                     @if (isset($autorArticulos))
-                        <h2 class="mt-4">Datos Filtrados</h2>
-                        <table class="table table-striped text-center">
+                        <table class="table table-striped text-center ">
                             <thead>
                                 <tr>
-                                    <th>Articulo</th>
                                     <th>Autor</th>
+                                    <th>Articulo</th>
+                                    <th>Resumen</th>
                                     <th>Fecha</th>
-                                    <!-- Agrega aquí las columnas que deseas mostrar -->
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($autorArticulos as $data)
                                     <tr>
-                                        <td>{{ $data->idArticulo }}</td>
-                                        <td>{{ $data->idAutor }}</td>
-                                        <td>{{ $data->fecha }}</td>
-                                        <!-- Agrega aquí las columnas que deseas mostrar -->
+                                        <td>{{ $data->autor->nombre }} {{$data->autor->apellido}}</td>
+                                        <td>{{ $data->articulo->titulo }}</td>
+                                        <td>{{ $data->articulo->resumen}}</td>
+                                        <td>{{ Carbon\Carbon::parse($data->fecha)->format('d-m-Y') }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
