@@ -25,7 +25,6 @@
                             @enderror
                         </div>
                         
-                        <!-- Mostrar autores seleccionados -->
                         <div class="form-group">
                             <label>Autores Seleccionados:</label>
                             <ul id="autoresSeleccionados"></ul>
@@ -38,7 +37,8 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        <div class="form-group">
+
+                       	<div class="form-group">
                             <label for="resumen">Resumen</label>
                             <textarea name="resumen" id="resumen" required placeholder="Resumen" class="form-control">{{ old('resumen') }}</textarea>
                             @error('resumen')
@@ -59,9 +59,9 @@
                             <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        <input type="hidden" name="activo" value="1">
+
                         <div class="box-footer mt-4">
-                            <button type="submit" class="btn btn-primary">{{ __('Guardar') }}</button>
+                            <button type="button" class="btn btn-primary" onclick="confirmGuardar()">{{ __('Guardar') }}</button>
                         </div>
                     </form>
                 </div>
@@ -71,42 +71,11 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    var autoresSelect = document.getElementById("autores");
-    var autoresSeleccionados = document.getElementById("autoresSeleccionados");
-
-    // Agregar evento de doble clic a los elementos del select
-    autoresSelect.addEventListener("dblclick", function(e) {
-        // Verificar si el evento proviene de un doble clic
-        if (e.detail === 2) {
-            // Obtener el elemento seleccionado
-            var selectedOption = autoresSelect.options[autoresSelect.selectedIndex];
-
-            // Agregar el autor a la lista
-            var autor = document.createElement("li");
-            autor.textContent = selectedOption.text;
-            autoresSeleccionados.appendChild(autor);
-
-            // Deseleccionar el elemento en el select
-            selectedOption.selected = false;
-        }
-    });
-
-    // Agregar un evento cuando se selecciona un autor
-    autoresSelect.addEventListener("change", function() {
-        // Limpiar la lista antes de agregar los nuevos autores
-        autoresSeleccionados.innerHTML = "";
-
-        // Obtener los elementos seleccionados
-        var selectedOptions = Array.from(autoresSelect.selectedOptions);
-
-        // Agregar cada autor seleccionado a la lista
-        selectedOptions.forEach(function(option) {
-            var autor = document.createElement("li");
-            autor.textContent = option.text;
-            autoresSeleccionados.appendChild(autor);
-        });
-    });
-});
+function confirmGuardar() {
+    var confirmacion = confirm("¿Desea guardar los datos?");
+    if (confirmacion) {
+        document.forms[0].submit();
+    }
+}
 </script>
 @endsection

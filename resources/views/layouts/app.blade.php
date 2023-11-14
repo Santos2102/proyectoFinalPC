@@ -41,7 +41,7 @@
                     <a class="nav-link" href="/crearAutorArticulo">Crear Articulo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="/autorarticulo">Filtro entre fechas</a>
+                    <a class="nav-link " href="/autorarticulo">Rango de fechas</a>
                 </li>
             </ul>
         </div>

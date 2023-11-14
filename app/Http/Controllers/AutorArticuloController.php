@@ -80,7 +80,8 @@ class AutorArticuloController extends Controller
                 'contenido' => 'required|string|max:200',
                 'fecha' => 'required|date',
             ]);
-            // Crear un nuevo artículo
+            
+
             $articulo = new Articulo([
                 'titulo' => $request->input('titulo'),
                 'resumen' => $request->input('resumen'),
@@ -99,7 +100,8 @@ class AutorArticuloController extends Controller
             }
 
             DB::commit();
-            return redirect()->action([AutorArticuloController::class,'index'])->withStatus(__('Articulo registrado exitosamente'));
+            return redirect()->action([ArticuloController::class, 'index'])->with('success', __('Articulo registrado exitosamente'));
+
         }
         catch(\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
