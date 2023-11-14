@@ -8,6 +8,8 @@ use App\Models\Articulo;
 use App\Models\Autor;
 use Illuminate\Support\Facades\Token;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class AutorArticuloController extends Controller
 {
@@ -69,20 +71,40 @@ class AutorArticuloController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
         try{
-            $autorArticulo = new AutorArticulo([
-                'idArticulo' => decrypt($request->idArticulo),
-                'idAutor' => decrypt($request->idAutor),
-                'fecha' => $request->fecha
+            $request->validate([
+                'autores' => 'required|array|min:1',
+                'titulo' => 'required|string|max:50',
+                'resumen' => 'required|string|max:100',
+                'contenido' => 'required|string|max:200',
+                'fecha' => 'required|date',
             ]);
-            $autorArticulo->save();
-            return redirect()->route('indexAutorArticulo')->with('success', 'AutorArticulo creado éxitosamente.');
+            // Crear un nuevo artículo
+            $articulo = new Articulo([
+                'titulo' => $request->input('titulo'),
+                'resumen' => $request->input('resumen'),
+                'contenido' => $request->input('contenido'),
+                'activo' => 1,
+            ]);
+            $articulo->save();
+
+            $idArticulo = $articulo->idArticulo;
+
+            $autoresSeleccionados = $request->input('autores');
+
+            for($i = 0; $i < count($autoresSeleccionados); $i++){
+                $informacion = ['idAutor'=>decrypt($autoresSeleccionados[$i]), 'idArticulo'=>$idArticulo, 'fecha' => $request -> fecha, 'created_at'=>Carbon::now(),'updated_at'=>Carbon::now()];
+                DB::table('autorarticulo')->insert($informacion);
+            }
+
+            DB::commit();
+            return redirect()->action([AutorArticuloController::class,'index'])->withStatus(__('Articulo registrado exitosamente'));
         }
         catch(\Illuminate\Validation\ValidationException $e) {
-            //DB::rollBack();
+            DB::rollBack();
             return back()->withErrors($e->validator->errors())->withInput();
         }
-
     }
 
     public function storeConsumible(Request $request)

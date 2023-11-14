@@ -6,11 +6,6 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="float-right">
-                        <a href="{{ route('crearAutorArticulo') }}" class="btn btn-primary btn-sm">
-                            {{ __('Nuevo') }}
-                        </a>
-                    </div>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('filtrarFechas') }}" role="form" enctype="multipart/form-data">

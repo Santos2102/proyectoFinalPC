@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Articulo;
 use Illuminate\Http\Request;
 
 class ArticuloController extends Controller
@@ -12,6 +13,16 @@ class ArticuloController extends Controller
     public function index()
     {
         //
+        try 
+        {
+            $articulos = Articulo::where('activo','1')->get();
+            return view('articulo.index', compact('articulos'));
+        }
+        catch(\Exception $e)
+        {
+            return back() -> with('error', 'Se produjo un error al procesar la solicitud');
+        }
+
     }
 
     /**
@@ -57,8 +68,19 @@ class ArticuloController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         //
+        try
+        {
+            $articulo = Articulo::find(decrypt($id))->update(['activo'=>'0']);
+
+        return redirect()->route('articulo.index')
+            ->with('success', 'Articulo eliminado éxitosamente');
+        }
+        catch(\Exception $e)
+        {
+            return back() -> with('error', 'Se produjo un error al procesar la solicitud');
+        }
     }
 }
