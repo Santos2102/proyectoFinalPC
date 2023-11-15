@@ -40,13 +40,24 @@ class AutorArticuloController extends Controller
 
     public function indexConsumible(Request $request)
     {
-        $startDate = $request->start_date;
-        $endDate = $request->end_date;
+        try {
+            $startDate = Carbon::parse($request->start_date);
+            $endDate = Carbon::parse($request->end_date);
 
-        $autorArticulos = AutorArticulo::whereBetween('fecha', [$startDate, $endDate])->get();
+            $autorArticulos = AutorArticulo::with('autor', 'articulo') // Assuming the relationships are named 'autor' and 'articulo'
+                ->whereBetween('fecha', [$startDate, $endDate])
+                ->get();
 
-        return response()->json($autorArticulos);
+            if ($autorArticulos->isEmpty()) {
+                return response()->json(['message' => 'No se encontraron resultados.'], 404);
+            }
+
+            return response()->json($autorArticulos);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

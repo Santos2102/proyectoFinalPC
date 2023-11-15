@@ -23,11 +23,13 @@ Route::get('/autorarticulo', [AutorArticuloController::class, 'index'])->name('i
 Route::get('/articulos',[ArticuloController::class, 'index'])->name('indexArticulo');
 
 
+
 Route::middleware(['web'])->group(function () {
     Route::post('/filtrarFechas', [AutorArticuloController::class, 'filtro'])->name('filtrarFechas');
     Route::get('/crearAutorArticulo', [AutorArticuloController::class, 'create'])->name('crearAutorArticulo');
     Route::post('/storeAutorarticulo', [AutorArticuloController::class, 'store'])->name('storeAutorArticulo');
-    
+    Route::post('/autorarticuloAPI', [AutorArticuloController::class, 'indexConsumible'])->name('indexAutorArticuloConsumible');
+
 });
 
 
