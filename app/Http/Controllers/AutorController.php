@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Autor;
 
 class AutorController extends Controller
 {
@@ -12,7 +13,17 @@ class AutorController extends Controller
     public function index()
     {
         //
+        try
+        {
+            $autor = Autor::All();
+            return response()->json($autor);
+        }
+        catch(\Exception $e)
+        {
+            return back() -> with('error', 'Se produjo un error al procesar la solicitud');
+        }
     }
+
 
     /**
      * Show the form for creating a new resource.

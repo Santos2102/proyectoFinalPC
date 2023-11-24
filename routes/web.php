@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AutorArticuloController;
 use App\Http\Controllers\ArticuloController;
+use App\Http\Controllers\AutorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,6 +22,8 @@ Route::get('/', function () {
 //Route::resource('/autorarticulo', AutorArticuloController::class);
 Route::get('/autorarticulo', [AutorArticuloController::class, 'index'])->name('indexAutorArticulo');
 Route::get('/articulos',[ArticuloController::class, 'index'])->name('indexArticulo');
+Route::get('/autores',[AutorController::class, 'index'])->name('indexAutor');
+Route::get('/articulosConsumible', [ArticuloController::class, 'articulos'])->name('indexArticuloConsumible');
 
 
 
@@ -29,6 +32,7 @@ Route::middleware(['web'])->group(function () {
     Route::get('/crearAutorArticulo', [AutorArticuloController::class, 'create'])->name('crearAutorArticulo');
     Route::post('/storeAutorarticulo', [AutorArticuloController::class, 'store'])->name('storeAutorArticulo');
     Route::post('/autorarticuloAPI', [AutorArticuloController::class, 'indexConsumible'])->name('indexAutorArticuloConsumible');
+    Route::post('/storeAutorArticuloAPI', [AutorArticuloController::class, 'storeConsumible'])->name('storeAutorArticuloConsumible');
 
 });
 
@@ -40,5 +44,6 @@ Route::get('/get-csrf-token', function () {
 });
 
 Route::delete('/deleteArticulo/{id}', [ArticuloController::class, 'destroy'])->name('deleteArticulo');
+Route::delete('/deleteArticuloConsumible/{id}', [ArticuloController::class, 'deleteArticulo'])->name('deleteArticuloConsumible');
 
 

@@ -12,10 +12,15 @@
                     <form method="POST" action="{{ route('filtrarFechas') }}" role="form" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="start_date">Fecha inicio</label>
-                                    <input type="date" name="start_date" id="start_date" required class="form-control">
+                                    <label for="start_date">Fecha de Inicio</label>
+                                    <?php
+                                        date_default_timezone_set('America/Guatemala');
+                                        $fechaActual = \Carbon\Carbon::now()->toDateString();
+                                    ?>
+                                    <input type="date" name="start_date" id="start_date" required class="form-control" value="{{ old('start_date', $fechaActual) }}">
                                     @error('start_date')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -23,13 +28,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="end_date">Fecha final</label>
-                                    <input type="date" name="end_date" id="end_date" required class="form-control">
+                                    <label for="end_date">Fecha Final</label>
+                                    <input type="date" name="end_date" id="end_date" required class="form-control" value="{{ old('end_date', $fechaActual) }}">
                                     @error('end_date')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
+                        </div>
                         </div>
                         <div class="text-center mt-3">
                             <button type="submit" class="btn btn-primary">{{ __('Verificar') }}</button>

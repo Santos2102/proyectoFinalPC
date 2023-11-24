@@ -122,13 +122,45 @@ class AutorArticuloController extends Controller
 
     public function storeConsumible(Request $request)
     {
-        $nuevoRegistro = new AutorArticulo([
-            'idArticulo' => $request->idArticulo,
-            'idAutor' => $request->idAutor,
-            'fecha' => $request->fecha
+        DB::beginTransaction();
+    try {
+        $request->validate([
+            'autores' => 'required|array|min:1',
+            'titulo' => 'required|string|max:50',
+            'resumen' => 'required|string|max:100',
+            'contenido' => 'required|string|max:200',
+            'fecha' => 'required|date',
         ]);
-        $nuevoRegistro->save();
-        return response()->json(['message' => 'Registro creado con éxito', 'data' => $nuevoRegistro], 201);
+
+        $articulo = new Articulo([
+            'titulo' => $request->input('titulo'),
+            'resumen' => $request->input('resumen'),
+            'contenido' => $request->input('contenido'),
+            'activo' => 1,
+        ]);
+        $articulo->save();
+
+        $idArticulo = $articulo->idArticulo;
+
+        $autoresSeleccionados = $request->input('autores');
+
+        foreach ($autoresSeleccionados as $autorId) {
+            $informacion = [
+                'idAutor' => $autorId,
+                'idArticulo' => $idArticulo,
+                'fecha' => $request->fecha,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ];
+            DB::table('autorarticulo')->insert($informacion);
+        }
+
+        DB::commit();
+        return response()->json(['message' => 'Articulo registrado exitosamente'], 200);
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        DB::rollBack();
+        return response()->json(['error' => 'Se produjo un error al procesar la solicitud', 'details' => $e->validator->errors()], 400);
+    }
     }
 
     /**

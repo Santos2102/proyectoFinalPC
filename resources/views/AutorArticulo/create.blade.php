@@ -13,22 +13,40 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('storeAutorArticulo') }}" role="form" enctype="multipart/form-data">
                         @csrf
-                        <div class="form-group">
-                            <label for="autores">Selecciona uno o más autores:</label>
-                            <select name="autores[]" id="autores" class="form-control" multiple required>
-                                @foreach ($autor as $item)
-                                    <option value="{{ encrypt($item->idAutor) }}">{{ $item->nombre }} {{ $item->apellido }}</option>
-                                @endforeach
-                            </select>
-                            @error('autores')
-                            <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Autores Seleccionados:</label>
-                            <ul id="autoresSeleccionados"></ul>
-                        </div>
+                    <div class="form-group">
+                        <label for="autores">Selecciona uno o más autores:</label>
+                        <select name="autores[]" id="autores" class="form-control" multiple required>
+                            @foreach ($autor as $item)
+                                <option value="{{ encrypt($item->idAutor) }}">{{ $item->nombre }} {{ $item->apellido }}</option>
+                            @endforeach
+                        </select>
+                        @error('autores')
+                        <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label>Autores Seleccionados:</label>
+                        <ul id="autoresSeleccionados"></ul>
+                    </div>
+
+                    <script>
+                        var selectAutores = document.getElementById('autores');
+                        var ulAutoresSeleccionados = document.getElementById('autoresSeleccionados');
+
+                        selectAutores.addEventListener('change', function () {
+                            ulAutoresSeleccionados.innerHTML = '';
+
+                            var selectedOptions = selectAutores.selectedOptions;
+                            for (var i = 0; i < selectedOptions.length; i++) {
+                                var option = selectedOptions[i];
+                                var li = document.createElement('li');
+                                li.textContent = option.textContent;
+                                ulAutoresSeleccionados.appendChild(li);
+                            }
+                        });
+                    </script>
+
 
                         <div class="form-group">
                             <label for="titulo">Título</label>
@@ -54,11 +72,18 @@
                         </div>
                         <div class="form-group">
                             <label for="fecha">Fecha</label>
-                            <input type="date" name="fecha" id="fecha" value="{{ old('fecha') }}" required placeholder="Fecha" class="form-control">
+                            <?php
+                                date_default_timezone_set('America/Guatemala');
+                                $fechaActual = \Carbon\Carbon::now()->toDateString();
+                            ?>
+                            <input type="date" name="fecha" id="fecha" value="{{ old('fecha', $fechaActual) }}" required placeholder="Fecha" class="form-control">
                             @error('fecha')
-                            <small class="text-danger">{{ $message }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
+
+
 
                         <div class="box-footer mt-4">
                             <button type="button" class="btn btn-primary" onclick="confirmGuardar()">{{ __('Guardar') }}</button>

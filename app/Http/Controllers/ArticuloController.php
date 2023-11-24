@@ -25,6 +25,18 @@ class ArticuloController extends Controller
 
     }
 
+    public function articulos(){
+        try
+        {
+            $articulos = Articulo::where('activo', '1')->get();
+            return response()->json($articulos);
+        }
+        catch(\Exception $e)
+        {
+            return back() -> with('error', 'Se produjo un eror al procesar la solicitud');
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -81,6 +93,18 @@ class ArticuloController extends Controller
         catch(\Exception $e)
         {
             return back() -> with('error', 'Se produjo un error al procesar la solicitud');
+        }
+    }
+
+    public function deleteArticulo($id)
+    {
+        try {
+            $articulo = Articulo::find($id);
+            $articulo->update(['activo' => 0]);
+
+            return response()->json(['message' => 'Articulo eliminado exitosamente']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Se produjo un error al procesar la solicitud'], 500);
         }
     }
 }
