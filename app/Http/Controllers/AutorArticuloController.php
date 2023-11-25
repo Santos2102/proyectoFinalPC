@@ -21,6 +21,14 @@ class AutorArticuloController extends Controller
         return view('AutorArticulo.index');
     }
 
+    public function indexExamen()
+    {
+        $articulo = Articulo::all();
+        $autor = Autor::All();
+        $autorArticulo = AutorArticulo::All();
+        return view('AutorArticulo.examen', compact('articulo','autor', 'autorArticulo'));
+    }
+
     public function filtro(Request $request)
     {
         try 
@@ -57,7 +65,37 @@ class AutorArticuloController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-
+    //Funcion para examen final
+    public function examenFinalWeb(Request $request){
+        try {
+            $articulo = Articulo::all();
+            $autor = Autor::All();
+            $idAutor = decrypt($request->idAutor);
+            $startDate = Carbon::parse($request->start_date);
+            $endDate = Carbon::parse($request->end_date);
+            $activo = $request->activo;
+        
+            $query = AutorArticulo::with(['autor', 'articulo']);
+        
+            if ($idAutor) {
+                $query->where('idAutor', $idAutor);
+            }
+        
+            $query->whereBetween('fecha', [$startDate, $endDate]);
+        
+            if (isset($activo)) {
+                $query->whereHas('articulo', function ($subquery) use ($activo) {
+                    $subquery->where('activo', $activo);
+                });
+            }
+        
+            $autorArticulos = $query->get();
+            return view('AutorArticulo.examen', compact('autorArticulos','autor','articulo'));
+        } catch (\Exception $e) {
+            return back() -> with('error', 'Se produjo un error al procesar la solicitud');
+        }
+        
+    }
 
     /**
      * Show the form for creating a new resource.

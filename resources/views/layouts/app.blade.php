@@ -43,6 +43,9 @@
                 <li class="nav-item">
                     <a class="nav-link " href="/autorarticulo">Rango de fechas</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="/indexExamen">Evaluación final</a>
+                </li>
             </ul>
         </div>
     </div>

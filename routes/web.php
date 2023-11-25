@@ -21,6 +21,7 @@ Route::get('/', function () {
 
 //Route::resource('/autorarticulo', AutorArticuloController::class);
 Route::get('/autorarticulo', [AutorArticuloController::class, 'index'])->name('indexAutorArticulo');
+Route::get('/indexExamen', [AutorArticuloController::class, 'indexExamen'])->name('indexExamen');
 Route::get('/articulos',[ArticuloController::class, 'index'])->name('indexArticulo');
 Route::get('/autores',[AutorController::class, 'index'])->name('indexAutor');
 Route::get('/articulosConsumible', [ArticuloController::class, 'articulos'])->name('indexArticuloConsumible');
@@ -33,7 +34,8 @@ Route::middleware(['web'])->group(function () {
     Route::post('/storeAutorarticulo', [AutorArticuloController::class, 'store'])->name('storeAutorArticulo');
     Route::post('/autorarticuloAPI', [AutorArticuloController::class, 'indexConsumible'])->name('indexAutorArticuloConsumible');
     Route::post('/storeAutorArticuloAPI', [AutorArticuloController::class, 'storeConsumible'])->name('storeAutorArticuloConsumible');
-
+    Route::post('/autorarticuloExamenFinal', [AutorArticuloController::class, 'indexExamenFinalConsumible'])->name('indexExamenFinal');
+    Route::post('/examenFinalWeb', [AutorArticuloController::class, 'examenFinalWeb'])->name('examenFinalWeb');
 });
 
 
